@@ -13,7 +13,6 @@
     "svc:ln:router"
   ],
   "channel_acceptor":"svc:ln:router",
-  "htlc_acceptor":"svc:regtest_bot",
   "peer_events": [
     "svc:ln:router"
   ],

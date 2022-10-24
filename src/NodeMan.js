@@ -37,33 +37,6 @@ class LightningManager extends EventEmitter {
         })
       })
 
-      const htlcAcceptor = this.config.events.htlc_acceptor
-      if (htlcAcceptor) {
-        const chanAcceptor = this.subscribeToForwardRequests(node)
-        console.log('HTLC acceptor is listening: service: ' + chanAcceptorSvc)
-        chanAcceptor.on('forward_request', (htlc) => {
-          this.emit('broadcast', {
-            method: 'newHtlcRequest',
-            args: htlc,
-            svc: chanAcceptorSvc,
-            cb: (err, data) => {
-              if (err) {
-                console.log('CHANNEL_HTLC_ERROR: ', err)
-                console.log('Rejecting channel', chan.id)
-                return chan.acceppt()
-              }
-              if (data.accept) {
-                console.log('Accepted HTLC', chan.id)
-                chan.accept()
-              } else {
-                console.log('Rejected HTLC', chan.id, data.reason)
-                chan.reject()
-              }
-            }
-          })
-        })
-      }
-
       const chanAcceptorSvc = this.config.events.channel_acceptor
       if (chanAcceptorSvc) {
         const chanAcceptor = this.subscribeToChannelRequests(node)
@@ -227,6 +200,11 @@ class LightningManager extends EventEmitter {
 
   subscribeToForwards (node) {
     return node.subscribeToForwards()
+  }
+
+  subscribeToForwardRequests(node){
+    return node.subscribeToForwardRequests(node)
+
   }
 
   subscribeToChannelRequests (node) {
