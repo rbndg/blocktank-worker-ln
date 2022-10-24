@@ -116,6 +116,10 @@ class LightningNode {
     return this.node.subscribeToChannelRequests()
   }
 
+  subscribeToForwardRequests(){
+    return this.node.subscribeToForwardRequests()
+  }
+
   subscribeToPeers () {
     return this.node.subscribeToPeers()
   }

@@ -74,6 +74,25 @@ class LND {
     })
   }
 
+  subscribeToForwardRequests () {
+    const event = new EventEmitter()
+    const sub = lns.subscribeToForwardRequests({ lnd: this.lnd })
+
+    sub.on('forward_request', (req) => {
+      event.emit('channel_request', req)
+    })
+    sub.on('end', (err) => {
+      event.emit('end', err)
+    })
+    sub.on('error', (err) => {
+      console.log('Connectin to LND threw error ')
+      console.log(err)
+      event.emit('end', err)
+    })
+    return event
+  }
+
+
   subscribeToChannelRequests () {
     const event = new EventEmitter()
     const sub = lns.subscribeToOpenRequests({ lnd: this.lnd })
